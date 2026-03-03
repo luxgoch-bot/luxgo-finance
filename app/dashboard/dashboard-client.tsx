@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { TrendingUp, TrendingDown, DollarSign, AlertCircle, Plus } from 'lucide-react'
 import { KpiCard } from '@/components/kpi-card'
 import { ProfileSwitcher } from '@/components/profile-switcher'
+import { MwstWidget } from '@/components/mwst-widget'
 import { IncomeExpenseChart } from '@/components/charts/income-expense-chart'
 import { ExpenseDonut } from '@/components/charts/expense-donut'
 import { Button } from '@/components/ui/button'
@@ -176,6 +177,15 @@ export function DashboardClient({
             description={`Q${currentQuarter} estimate`}
           />
         </div>
+
+        {/* MWST Widget */}
+        <MwstWidget
+          year={currentYear}
+          quarter={currentQuarter as 1 | 2 | 3 | 4}
+          vatPayable={vatPayable}
+          vatCollected={vatCollected}
+          inputTax={vatPaid}
+        />
 
         {/* Charts */}
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
