@@ -1,8 +1,41 @@
-export default function ExpensesPage() {
+import { createClient } from '@/lib/supabase-server'
+import { redirect } from 'next/navigation'
+import { ExpensesClient } from './expenses-client'
+import type { Profile, TaxYear, Expense } from '@/types'
+
+export default async function ExpensesPage() {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) redirect('/login')
+
+  const { data: profiles } = await supabase
+    .from('profiles')
+    .select('*')
+    .eq('user_id', user.id)
+    .order('type')
+
+  if (!profiles?.length) redirect('/setup')
+
+  const profileIds = profiles.map((p: Profile) => p.id)
+
+  const [{ data: expenseData }, { data: taxYears }] = await Promise.all([
+    supabase
+      .from('expenses')
+      .select('*')
+      .in('profile_id', profileIds)
+      .order('date', { ascending: false }),
+    supabase
+      .from('tax_years')
+      .select('*')
+      .in('profile_id', profileIds)
+      .order('year', { ascending: false }),
+  ])
+
   return (
-    <div className="p-8">
-      <h1 className="text-2xl font-bold">Expenses</h1>
-      <p className="text-muted-foreground mt-1">Track all business expenses</p>
-    </div>
+    <ExpensesClient
+      profiles={profiles as Profile[]}
+      expenseRecords={(expenseData as Expense[]) ?? []}
+      taxYears={(taxYears as TaxYear[]) ?? []}
+    />
   )
 }

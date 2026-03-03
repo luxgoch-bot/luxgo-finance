@@ -41,7 +41,7 @@ export interface TaxYear {
 export interface Income {
   id: string
   profile_id: string
-  tax_year_id: string
+  tax_year_id?: string
   date: string            // ISO date string
   description?: string
   client?: string
@@ -58,7 +58,7 @@ export interface Income {
 export interface Expense {
   id: string
   profile_id: string
-  tax_year_id: string
+  tax_year_id?: string
   date: string            // ISO date string
   description?: string
   vendor?: string
