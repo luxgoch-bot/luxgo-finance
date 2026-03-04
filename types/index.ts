@@ -111,3 +111,42 @@ export type UpdateIncomeInput = Partial<CreateIncomeInput>
 export type UpdateExpenseInput = Partial<CreateExpenseInput>
 export type UpdateTaxYearInput = Partial<CreateTaxYearInput>
 export type UpdateMwstReportInput = Partial<CreateMwstReportInput>
+
+// ==========================================
+// Loans & Repayments
+// ==========================================
+
+export type LoanType = 'personal' | 'business' | 'mortgage' | 'vehicle' | 'other'
+
+export interface Loan {
+  id: string
+  profile_id: string
+  tax_year_id?: string | null
+  provider: string
+  description?: string
+  loan_type: LoanType
+  original_amount: number
+  interest_rate: number    // e.g. 3.5 means 3.5% p.a.
+  start_date: string
+  end_date?: string | null
+  currency: string
+  notes?: string
+  created_at: string
+}
+
+export interface LoanRepayment {
+  id: string
+  loan_id: string
+  profile_id: string
+  date: string
+  total_payment: number
+  capital_amount: number
+  interest_amount: number
+  outstanding_balance?: number | null
+  notes?: string
+  receipt_url?: string
+  created_at: string
+}
+
+export type CreateLoanInput = Omit<Loan, 'id' | 'created_at'>
+export type CreateLoanRepaymentInput = Omit<LoanRepayment, 'id' | 'created_at'>

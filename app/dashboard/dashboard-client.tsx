@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from 'react'
 import Link from 'next/link'
-import { TrendingUp, TrendingDown, DollarSign, AlertCircle, Plus } from 'lucide-react'
+import { TrendingUp, TrendingDown, DollarSign, AlertCircle, Plus, Landmark } from 'lucide-react'
 import { KpiCard } from '@/components/kpi-card'
 import { ProfileSwitcher } from '@/components/profile-switcher'
 import { MwstWidget } from '@/components/mwst-widget'
@@ -11,7 +11,7 @@ import { ExpenseDonut } from '@/components/charts/expense-donut'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { calculateVatPayable, extractVAT } from '@/lib/helpers/vat'
-import type { Profile, Income, Expense } from '@/types'
+import type { Profile, Income, Expense, Loan, LoanRepayment } from '@/types'
 
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
@@ -19,6 +19,8 @@ interface DashboardClientProps {
   profiles: Profile[]
   initialIncome: Income[]
   initialExpenses: Expense[]
+  initialLoans: Loan[]
+  initialRepayments: LoanRepayment[]
   currentYear: number
 }
 
@@ -26,6 +28,8 @@ export function DashboardClient({
   profiles,
   initialIncome,
   initialExpenses,
+  initialLoans,
+  initialRepayments,
   currentYear,
 }: DashboardClientProps) {
   const [currentProfile, setCurrentProfile] = useState<Profile>(profiles[0])
@@ -69,6 +73,29 @@ export function DashboardClient({
     [currentQuarterExpenses]
   )
   const vatPayable = calculateVatPayable(vatCollected, vatPaid)
+
+  // Loans: outstanding debt + YTD interest for current profile
+  const profileLoans = useMemo(
+    () => initialLoans.filter(l => l.profile_id === currentProfile.id),
+    [initialLoans, currentProfile.id]
+  )
+  const totalOutstandingDebt = useMemo(() => {
+    return profileLoans.reduce((sum, loan) => {
+      const loanRepayments = initialRepayments
+        .filter(r => r.loan_id === loan.id)
+        .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+      if (!loanRepayments.length) return sum + loan.original_amount
+      return sum + (loanRepayments[loanRepayments.length - 1].outstanding_balance ?? loan.original_amount)
+    }, 0)
+  }, [profileLoans, initialRepayments])
+  const loanInterestYtd = useMemo(() => {
+    return initialRepayments
+      .filter(r => {
+        const loan = initialLoans.find(l => l.id === r.loan_id)
+        return loan?.profile_id === currentProfile.id && new Date(r.date).getFullYear() === currentYear
+      })
+      .reduce((sum, r) => sum + r.interest_amount, 0)
+  }, [initialRepayments, initialLoans, currentProfile.id, currentYear])
 
   // ── Monthly chart data ─────────────────────────────────────────
   const monthlyData = useMemo(() => {
@@ -168,6 +195,13 @@ export function DashboardClient({
             icon={DollarSign}
             variant={netProfit >= 0 ? 'positive' : 'negative'}
             description={`${netProfit >= 0 ? 'Profit' : 'Loss'} this year`}
+          />
+          <KpiCard
+            title="Outstanding Debt"
+            value={totalOutstandingDebt}
+            icon={Landmark}
+            variant="negative"
+            description={`${profileLoans.length} loan${profileLoans.length !== 1 ? 's' : ''} · interest ytd: CHF ${loanInterestYtd.toFixed(2)}`}
           />
           <KpiCard
             title="VAT Payable Next Quarter"

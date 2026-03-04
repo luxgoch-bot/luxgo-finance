@@ -9,7 +9,8 @@
     "settings": "Einstellungen",
     "newInvoice": "Neue Rechnung",
     "quickActions": "Schnellaktionen",
-    "signOut": "Abmelden"
+    "signOut": "Abmelden",
+    "loans": "Kredite"
   },
   "common": {
     "save": "Speichern",
@@ -276,5 +277,35 @@
     "de": "DE",
     "english": "English",
     "german": "Deutsch"
+  },
+  "loans": {
+    "title": "Kredite & Rückzahlungen",
+    "subtitle": "Schulden und steuerabzugsfähige Zinsen",
+    "addLoan": "Kredit erfassen",
+    "addRepayment": "Rückzahlung erfassen",
+    "noLoans": "Noch keine Kredite erfasst — fügen Sie Ihren ersten Kredit hinzu",
+    "totalDebt": "Ausstehende Gesamtschulden",
+    "interestYtd": "Zinsen bezahlt (laufendes Jahr)",
+    "deductibleNote": "Steuerabzugsfähig (Schuldzinsen)",
+    "provider": "Kreditgeber",
+    "loanType": "Kreditart",
+    "originalAmount": "Ursprünglicher Betrag",
+    "interestRate": "Zinssatz",
+    "outstandingBalance": "Ausstehender Betrag",
+    "capitalAmount": "Kapital",
+    "interestAmount": "Zinsen",
+    "totalPayment": "Gesamtzahlung",
+    "paidOff": "Abgezahlt",
+    "active": "Aktiv",
+    "taxSummary": "Steuerübersicht",
+    "startDate": "Startdatum",
+    "endDate": "Enddatum",
+    "types": {
+      "personal": "Privat",
+      "business": "Geschäftlich",
+      "mortgage": "Hypothek",
+      "vehicle": "Fahrzeug",
+      "other": "Sonstiges"
+    }
   }
 }

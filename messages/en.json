@@ -9,7 +9,8 @@
     "settings": "Settings",
     "newInvoice": "New Invoice",
     "quickActions": "Quick Actions",
-    "signOut": "Sign out"
+    "signOut": "Sign out",
+    "loans": "Loans"
   },
   "common": {
     "save": "Save",
@@ -276,5 +277,35 @@
     "de": "DE",
     "english": "English",
     "german": "Deutsch"
+  },
+  "loans": {
+    "title": "Loans & Repayments",
+    "subtitle": "Debt tracking and tax deductible interest",
+    "addLoan": "Add Loan",
+    "addRepayment": "Add Repayment",
+    "noLoans": "No loans recorded yet — add your first loan",
+    "totalDebt": "Total Outstanding Debt",
+    "interestYtd": "Interest Paid YTD",
+    "deductibleNote": "Tax deductible (Schuldzinsen)",
+    "provider": "Provider",
+    "loanType": "Loan Type",
+    "originalAmount": "Original Amount",
+    "interestRate": "Interest Rate",
+    "outstandingBalance": "Outstanding Balance",
+    "capitalAmount": "Capital",
+    "interestAmount": "Interest",
+    "totalPayment": "Total Payment",
+    "paidOff": "Paid Off",
+    "active": "Active",
+    "taxSummary": "Tax Summary",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "types": {
+      "personal": "Personal",
+      "business": "Business",
+      "mortgage": "Mortgage",
+      "vehicle": "Vehicle",
+      "other": "Other"
+    }
   }
 }
