@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import Link from 'next/link'
 import { useTranslations } from 'next-intl'
 import { login } from '@/app/actions/auth'
 import { Button } from '@/components/ui/button'
@@ -45,7 +44,7 @@ export default function LoginPage() {
           <CardHeader className="pb-4">
             <div className="flex items-center justify-between">
               <CardTitle className="text-white text-xl">{t('signIn')}</CardTitle>
-              {/* Language toggle on login page */}
+              {/* Language toggle */}
               <div className="flex items-center gap-1 bg-gray-800 rounded-lg p-0.5">
                 <button
                   onClick={() => setLocale('en')}
@@ -102,13 +101,6 @@ export default function LoginPage() {
                 {loading ? t('signingIn') : t('signIn')}
               </Button>
             </form>
-
-            <p className="text-center text-sm text-gray-500 mt-4">
-              {t('noAccount')}{' '}
-              <Link href="/signup" className="text-amber-400 hover:text-amber-300 underline underline-offset-2">
-                {t('signUp')}
-              </Link>
-            </p>
           </CardContent>
         </Card>
 

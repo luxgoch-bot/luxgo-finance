@@ -29,12 +29,13 @@ export async function middleware(request: NextRequest) {
 
   const { pathname } = request.nextUrl
 
+  // /signup is removed — redirect to login
+  if (pathname.startsWith('/signup')) {
+    return NextResponse.redirect(new URL('/login', request.url))
+  }
+
   // Public routes — no auth needed
-  if (
-    pathname.startsWith('/login') ||
-    pathname.startsWith('/signup') ||
-    pathname.startsWith('/auth')
-  ) {
+  if (pathname.startsWith('/login') || pathname.startsWith('/auth')) {
     if (user && !pathname.startsWith('/auth')) {
       // Already logged in — redirect to dashboard
       return NextResponse.redirect(new URL('/dashboard', request.url))
