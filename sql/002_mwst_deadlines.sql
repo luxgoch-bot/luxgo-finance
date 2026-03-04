@@ -60,9 +60,11 @@ ON CONFLICT DO NOTHING;
 
 ALTER TABLE mwst_periods ENABLE ROW LEVEL SECURITY;
 ALTER TABLE mwst_reminders ENABLE ROW LEVEL SECURITY;
+ALTER TABLE mwst_deadline_rules ENABLE ROW LEVEL SECURITY;
 
--- mwst_deadline_rules is a public reference table — no RLS needed
--- (read-only, no user data)
+-- mwst_deadline_rules: public reference table — allow all authenticated users to read
+CREATE POLICY "mwst_deadline_rules_public_read" ON mwst_deadline_rules
+  FOR SELECT USING (true);
 
 CREATE POLICY "mwst_periods_own" ON mwst_periods
   USING (profile_id IN (SELECT my_profile_ids()))
