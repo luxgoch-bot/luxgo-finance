@@ -30,8 +30,12 @@ export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
 
   // Public routes — no auth needed
-  if (pathname.startsWith('/login') || pathname.startsWith('/auth')) {
-    if (user) {
+  if (
+    pathname.startsWith('/login') ||
+    pathname.startsWith('/signup') ||
+    pathname.startsWith('/auth')
+  ) {
+    if (user && !pathname.startsWith('/auth')) {
       // Already logged in — redirect to dashboard
       return NextResponse.redirect(new URL('/dashboard', request.url))
     }
