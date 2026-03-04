@@ -13,15 +13,17 @@ import {
   FolderOpen,
   LogOut,
   Receipt,
+  Settings,
 } from 'lucide-react'
 
 const navItems = [
-  { href: '/dashboard',           label: 'Dashboard',   icon: LayoutDashboard },
-  { href: '/dashboard/income',    label: 'Income',      icon: TrendingUp },
-  { href: '/dashboard/expenses',  label: 'Expenses',    icon: TrendingDown },
-  { href: '/dashboard/mwst',      label: 'MWST',        icon: Receipt },
-  { href: '/dashboard/tax-year',  label: 'Tax Year',    icon: CalendarDays },
-  { href: '/dashboard/documents', label: 'Documents',   icon: FolderOpen },
+  { href: '/dashboard',              label: 'Dashboard',   icon: LayoutDashboard },
+  { href: '/dashboard/income',       label: 'Income',      icon: TrendingUp },
+  { href: '/dashboard/expenses',     label: 'Expenses',    icon: TrendingDown },
+  { href: '/dashboard/mwst',        label: 'MWST',        icon: Receipt },
+  { href: '/dashboard/tax-year',     label: 'Tax Year',    icon: CalendarDays },
+  { href: '/dashboard/documents',    label: 'Documents',   icon: FolderOpen },
+  { href: '/dashboard/settings',     label: 'Settings',    icon: Settings },
 ]
 
 export function Sidebar() {
