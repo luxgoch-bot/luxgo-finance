@@ -2,31 +2,28 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 import { signup } from '@/app/actions/auth'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { useLocale } from '@/lib/locale-context'
 
 export default function SignupPage() {
+  const t = useTranslations('auth')
+  const tLang = useTranslations('language')
+  const { locale, setLocale } = useLocale()
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
 
   async function handleSubmit(formData: FormData) {
     setError(null)
-
     const password = formData.get('password') as string
     const confirm = formData.get('confirm_password') as string
 
-    if (password !== confirm) {
-      setError('Passwords do not match.')
-      return
-    }
-
-    if (password.length < 8) {
-      setError('Password must be at least 8 characters.')
-      return
-    }
+    if (password !== confirm) { setError(t('passwordMismatch')); return }
+    if (password.length < 8) { setError(t('passwordTooShort')); return }
 
     setLoading(true)
     const result = await signup(formData)
@@ -39,7 +36,6 @@ export default function SignupPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-950">
       <div className="w-full max-w-md px-4">
-        {/* Logo */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center gap-2 mb-2">
             <div className="w-10 h-10 bg-amber-500 rounded-lg flex items-center justify-center">
@@ -52,47 +48,41 @@ export default function SignupPage() {
 
         <Card className="border-gray-800 bg-gray-900">
           <CardHeader className="pb-4">
-            <CardTitle className="text-white text-xl">Create account</CardTitle>
-            <CardDescription className="text-gray-400">
-              Set up your LuxGo Finance account
-            </CardDescription>
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-white text-xl">{t('signUp')}</CardTitle>
+              <div className="flex items-center gap-1 bg-gray-800 rounded-lg p-0.5">
+                <button
+                  onClick={() => setLocale('en')}
+                  className={`px-2.5 py-1 rounded-md text-xs font-semibold transition-colors ${locale === 'en' ? 'bg-amber-500 text-black' : 'text-gray-400 hover:text-white'}`}
+                >
+                  {tLang('en')}
+                </button>
+                <button
+                  onClick={() => setLocale('de')}
+                  className={`px-2.5 py-1 rounded-md text-xs font-semibold transition-colors ${locale === 'de' ? 'bg-amber-500 text-black' : 'text-gray-400 hover:text-white'}`}
+                >
+                  {tLang('de')}
+                </button>
+              </div>
+            </div>
+            <CardDescription className="text-gray-400">{t('signUpDesc')}</CardDescription>
           </CardHeader>
           <CardContent>
             <form action={handleSubmit} className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-gray-300">Email</Label>
-                <Input
-                  id="email"
-                  name="email"
-                  type="email"
-                  placeholder="you@example.com"
-                  required
-                  className="bg-gray-800 border-gray-700 text-white placeholder:text-gray-500 focus:border-amber-500"
-                />
+                <Label htmlFor="email" className="text-gray-300">{t('email')}</Label>
+                <Input id="email" name="email" type="email" placeholder="you@example.com" required
+                  className="bg-gray-800 border-gray-700 text-white placeholder:text-gray-500 focus:border-amber-500" />
               </div>
-
               <div className="space-y-2">
-                <Label htmlFor="password" className="text-gray-300">Password</Label>
-                <Input
-                  id="password"
-                  name="password"
-                  type="password"
-                  placeholder="Min. 8 characters"
-                  required
-                  className="bg-gray-800 border-gray-700 text-white placeholder:text-gray-500 focus:border-amber-500"
-                />
+                <Label htmlFor="password" className="text-gray-300">{t('password')}</Label>
+                <Input id="password" name="password" type="password" placeholder={t('passwordMinLength')} required
+                  className="bg-gray-800 border-gray-700 text-white placeholder:text-gray-500 focus:border-amber-500" />
               </div>
-
               <div className="space-y-2">
-                <Label htmlFor="confirm_password" className="text-gray-300">Confirm password</Label>
-                <Input
-                  id="confirm_password"
-                  name="confirm_password"
-                  type="password"
-                  placeholder="Repeat password"
-                  required
-                  className="bg-gray-800 border-gray-700 text-white placeholder:text-gray-500 focus:border-amber-500"
-                />
+                <Label htmlFor="confirm_password" className="text-gray-300">{t('confirmPassword')}</Label>
+                <Input id="confirm_password" name="confirm_password" type="password" placeholder={t('repeatPassword')} required
+                  className="bg-gray-800 border-gray-700 text-white placeholder:text-gray-500 focus:border-amber-500" />
               </div>
 
               {error && (
@@ -101,27 +91,22 @@ export default function SignupPage() {
                 </div>
               )}
 
-              <Button
-                type="submit"
-                disabled={loading}
-                className="w-full bg-amber-500 hover:bg-amber-400 text-black font-semibold"
-              >
-                {loading ? 'Creating account…' : 'Create account'}
+              <Button type="submit" disabled={loading}
+                className="w-full bg-amber-500 hover:bg-amber-400 text-black font-semibold">
+                {loading ? t('creatingAccount') : t('signUp')}
               </Button>
             </form>
 
             <p className="text-center text-sm text-gray-500 mt-4">
-              Already have an account?{' '}
+              {t('haveAccount')}{' '}
               <Link href="/login" className="text-amber-400 hover:text-amber-300 underline underline-offset-2">
-                Sign in
+                {t('signIn')}
               </Link>
             </p>
           </CardContent>
         </Card>
 
-        <p className="text-center text-xs text-gray-600 mt-6">
-          LuxGo Finance · Private Access Only
-        </p>
+        <p className="text-center text-xs text-gray-600 mt-6">{t('privateAccess')}</p>
       </div>
     </div>
   )

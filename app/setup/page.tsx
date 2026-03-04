@@ -1,12 +1,14 @@
 'use client'
 
 import { useState } from 'react'
+import { useTranslations } from 'next-intl'
 import { createProfiles } from '@/app/actions/profile'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Building2, User } from 'lucide-react'
 
 export default function SetupPage() {
+  const t = useTranslations('setup')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -30,14 +32,14 @@ export default function SetupPage() {
             </div>
             <span className="text-white text-2xl font-bold tracking-tight">LuxGo Finance</span>
           </div>
-          <p className="text-gray-400 text-sm mt-1">Welcome! Let&apos;s set up your profiles.</p>
+          <p className="text-gray-400 text-sm mt-1">{t('welcome')}</p>
         </div>
 
         <Card className="border-gray-800 bg-gray-900">
           <CardHeader>
-            <CardTitle className="text-white">Your profiles</CardTitle>
+            <CardTitle className="text-white">{t('yourProfiles')}</CardTitle>
             <CardDescription className="text-gray-400">
-              We&apos;ll create two profiles for you — both are always accessible via the switcher.
+              {t('profilesDesc')}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -47,9 +49,9 @@ export default function SetupPage() {
                 <Building2 className="h-5 w-5 text-amber-400" />
               </div>
               <div>
-                <p className="font-semibold text-white">LuxGo GmbH</p>
-                <p className="text-sm text-gray-400">Business profile · MWST registered · Canton ZH</p>
-                <p className="text-xs text-gray-500 mt-1">Income, expenses, MWST reports, invoices</p>
+                <p className="font-semibold text-white">{t('businessProfile')}</p>
+                <p className="text-sm text-gray-400">{t('businessDesc')}</p>
+                <p className="text-xs text-gray-500 mt-1">{t('businessFeatures')}</p>
               </div>
             </div>
 
@@ -60,8 +62,8 @@ export default function SetupPage() {
               </div>
               <div>
                 <p className="font-semibold text-white">Dejan</p>
-                <p className="text-sm text-gray-400">Personal profile · Canton ZH</p>
-                <p className="text-xs text-gray-500 mt-1">Personal income tax, private expenses</p>
+                <p className="text-sm text-gray-400">{t('personalDesc')}</p>
+                <p className="text-xs text-gray-500 mt-1">{t('personalFeatures')}</p>
               </div>
             </div>
 
@@ -76,7 +78,7 @@ export default function SetupPage() {
               disabled={loading}
               className="w-full bg-amber-500 hover:bg-amber-400 text-black font-semibold mt-2"
             >
-              {loading ? 'Setting up…' : 'Create profiles and continue →'}
+              {loading ? t('settingUp') : t('createProfiles')}
             </Button>
           </CardContent>
         </Card>

@@ -2,13 +2,18 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 import { login } from '@/app/actions/auth'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { useLocale } from '@/lib/locale-context'
 
 export default function LoginPage() {
+  const t = useTranslations('auth')
+  const tLang = useTranslations('language')
+  const { locale, setLocale } = useLocale()
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
 
@@ -38,15 +43,30 @@ export default function LoginPage() {
 
         <Card className="border-gray-800 bg-gray-900">
           <CardHeader className="pb-4">
-            <CardTitle className="text-white text-xl">Sign in</CardTitle>
-            <CardDescription className="text-gray-400">
-              Enter your credentials to access your account
-            </CardDescription>
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-white text-xl">{t('signIn')}</CardTitle>
+              {/* Language toggle on login page */}
+              <div className="flex items-center gap-1 bg-gray-800 rounded-lg p-0.5">
+                <button
+                  onClick={() => setLocale('en')}
+                  className={`px-2.5 py-1 rounded-md text-xs font-semibold transition-colors ${locale === 'en' ? 'bg-amber-500 text-black' : 'text-gray-400 hover:text-white'}`}
+                >
+                  {tLang('en')}
+                </button>
+                <button
+                  onClick={() => setLocale('de')}
+                  className={`px-2.5 py-1 rounded-md text-xs font-semibold transition-colors ${locale === 'de' ? 'bg-amber-500 text-black' : 'text-gray-400 hover:text-white'}`}
+                >
+                  {tLang('de')}
+                </button>
+              </div>
+            </div>
+            <CardDescription className="text-gray-400">{t('signInDesc')}</CardDescription>
           </CardHeader>
           <CardContent>
             <form action={handleSubmit} className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-gray-300">Email</Label>
+                <Label htmlFor="email" className="text-gray-300">{t('email')}</Label>
                 <Input
                   id="email"
                   name="email"
@@ -57,7 +77,7 @@ export default function LoginPage() {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="password" className="text-gray-300">Password</Label>
+                <Label htmlFor="password" className="text-gray-300">{t('password')}</Label>
                 <Input
                   id="password"
                   name="password"
@@ -79,22 +99,20 @@ export default function LoginPage() {
                 disabled={loading}
                 className="w-full bg-amber-500 hover:bg-amber-400 text-black font-semibold"
               >
-                {loading ? 'Signing in…' : 'Sign in'}
+                {loading ? t('signingIn') : t('signIn')}
               </Button>
             </form>
 
             <p className="text-center text-sm text-gray-500 mt-4">
-              Don&apos;t have an account?{' '}
+              {t('noAccount')}{' '}
               <Link href="/signup" className="text-amber-400 hover:text-amber-300 underline underline-offset-2">
-                Sign up
+                {t('signUp')}
               </Link>
             </p>
           </CardContent>
         </Card>
 
-        <p className="text-center text-xs text-gray-600 mt-6">
-          LuxGo Finance · Private Access Only
-        </p>
+        <p className="text-center text-xs text-gray-600 mt-6">{t('privateAccess')}</p>
       </div>
     </div>
   )

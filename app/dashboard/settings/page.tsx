@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase'
 import { toast } from 'sonner'
+import { useTranslations } from 'next-intl'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -44,6 +45,8 @@ interface UserSettings {
 
 export default function SettingsPage() {
   const supabase = createClient()
+  const t = useTranslations('settings')
+  const tCommon = useTranslations('common')
 
   const [loading, setLoading] = useState(true)
   const [profile, setProfile] = useState<Profile | null>(null)
@@ -122,7 +125,7 @@ export default function SettingsPage() {
     if (profileForm.uid_mwst) {
       const mwstRegex = /^CHE-\d{3}\.\d{3}\.\d{3} MWST$/
       if (!mwstRegex.test(profileForm.uid_mwst)) {
-        setProfileError('UID MWST must be in format: CHE-123.456.789 MWST')
+        setProfileError(t('uidMwstError'))
         return
       }
     }
@@ -141,7 +144,7 @@ export default function SettingsPage() {
     if (error) {
       toast.error('Failed to save profile')
     } else {
-      toast.success('Profile saved')
+      toast.success(t('saveProfile'))
       setProfile(prev => prev ? { ...prev, ...profileForm } : prev)
     }
     setProfileSaving(false)
@@ -196,7 +199,7 @@ export default function SettingsPage() {
     if (error) {
       toast.error('Failed to save preferences')
     } else {
-      toast.success('Preferences saved')
+      toast.success(t('savePreferences'))
     }
     setPrefSaving(false)
   }
@@ -291,8 +294,8 @@ export default function SettingsPage() {
             <Settings className="h-5 w-5 text-amber-400" />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-white">Settings</h1>
-            <p className="text-sm text-gray-400">Manage your account, profile &amp; preferences</p>
+            <h1 className="text-xl font-bold text-white">{t('title')}</h1>
+            <p className="text-sm text-gray-400">{t('subtitle')}</p>
           </div>
         </div>
 
@@ -307,13 +310,13 @@ export default function SettingsPage() {
                 <Building2 className="h-4 w-4 mr-2" />Profile
               </TabsTrigger>
               <TabsTrigger value="tax-years" className="data-[state=active]:bg-gray-800 data-[state=active]:text-white text-gray-400">
-                <CalendarDays className="h-4 w-4 mr-2" />Tax Years
+                <CalendarDays className="h-4 w-4 mr-2" />{t('taxYears')}
               </TabsTrigger>
               <TabsTrigger value="preferences" className="data-[state=active]:bg-gray-800 data-[state=active]:text-white text-gray-400">
-                <Bell className="h-4 w-4 mr-2" />Preferences
+                <Bell className="h-4 w-4 mr-2" />{t('preferences')}
               </TabsTrigger>
               <TabsTrigger value="export" className="data-[state=active]:bg-gray-800 data-[state=active]:text-white text-gray-400">
-                <Download className="h-4 w-4 mr-2" />Export
+                <Download className="h-4 w-4 mr-2" />{t('export')}
               </TabsTrigger>
             </TabsList>
 
@@ -321,14 +324,12 @@ export default function SettingsPage() {
             <TabsContent value="profile">
               <Card className="bg-gray-900 border-gray-800">
                 <CardHeader>
-                  <CardTitle className="text-white">Company Profile</CardTitle>
-                  <CardDescription className="text-gray-400">
-                    Your GmbH details used across all tax calculations and documents
-                  </CardDescription>
+                  <CardTitle className="text-white">{t('companyProfile')}</CardTitle>
+                  <CardDescription className="text-gray-400">{t('companyDesc')}</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="space-y-2">
-                    <Label className="text-gray-300">Company Name</Label>
+                    <Label className="text-gray-300">{t('companyName')}</Label>
                     <Input
                       value={profileForm.name}
                       onChange={e => setProfileForm(p => ({ ...p, name: e.target.value }))}
@@ -354,7 +355,7 @@ export default function SettingsPage() {
                   </div>
 
                   <div className="space-y-2">
-                    <Label className="text-gray-300">Address</Label>
+                    <Label className="text-gray-300">{t('address')}</Label>
                     <Input
                       value={profileForm.address}
                       onChange={e => setProfileForm(p => ({ ...p, address: e.target.value }))}
@@ -364,7 +365,7 @@ export default function SettingsPage() {
                   </div>
 
                   <div className="space-y-2">
-                    <Label className="text-gray-300">Canton</Label>
+                    <Label className="text-gray-300">{t('canton')}</Label>
                     <Select
                       value={profileForm.canton}
                       onValueChange={v => setProfileForm(p => ({ ...p, canton: v }))}
@@ -387,7 +388,7 @@ export default function SettingsPage() {
                     disabled={profileSaving}
                     className="bg-amber-500 hover:bg-amber-400 text-black font-semibold"
                   >
-                    {profileSaving ? 'Saving…' : 'Save Profile'}
+                    {profileSaving ? tCommon('saving') : t('saveProfile')}
                   </Button>
                 </CardContent>
               </Card>
@@ -399,15 +400,15 @@ export default function SettingsPage() {
                 <CardHeader>
                   <div className="flex items-center justify-between">
                     <div>
-                      <CardTitle className="text-white">Tax Years</CardTitle>
-                      <CardDescription className="text-gray-400">Open or close fiscal years</CardDescription>
+                      <CardTitle className="text-white">{t('taxYearsTitle')}</CardTitle>
+                      <CardDescription className="text-gray-400">{t('taxYearsDesc')}</CardDescription>
                     </div>
                     <Button
                       size="sm"
                       onClick={() => setAddingYear(true)}
                       className="bg-amber-500 hover:bg-amber-400 text-black font-semibold"
                     >
-                      <Plus className="h-4 w-4 mr-1" /> Add Year
+                      <Plus className="h-4 w-4 mr-1" /> {t('addYear')}
                     </Button>
                   </div>
                 </CardHeader>
@@ -463,7 +464,7 @@ export default function SettingsPage() {
                               onClick={() => toggleTaxYearStatus(ty)}
                               className="text-xs text-gray-400 hover:text-white transition-colors underline underline-offset-2"
                             >
-                              {ty.status === 'open' ? 'Close year' : 'Reopen'}
+                              {ty.status === 'open' ? t('closeYear') : t('reopen')}
                             </button>
                           </div>
                         </div>
@@ -478,14 +479,14 @@ export default function SettingsPage() {
             <TabsContent value="preferences">
               <Card className="bg-gray-900 border-gray-800">
                 <CardHeader>
-                  <CardTitle className="text-white">Preferences</CardTitle>
+                  <CardTitle className="text-white">{t('preferencesTitle')}</CardTitle>
                   <CardDescription className="text-gray-400">
                     Default VAT rate and MWST deadline notifications
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
                   <div className="space-y-2">
-                    <Label className="text-gray-300">Default VAT Rate (%)</Label>
+                    <Label className="text-gray-300">{t('defaultVatRate')}</Label>
                     <div className="flex items-center gap-3">
                       <Input
                         type="number"
@@ -496,12 +497,12 @@ export default function SettingsPage() {
                         onChange={e => setSettings(s => ({ ...s, default_vat_rate: parseFloat(e.target.value) || 8.1 }))}
                         className="w-32 bg-gray-800 border-gray-700 text-white focus:border-amber-500"
                       />
-                      <span className="text-gray-500 text-sm">Standard Swiss MWST is 8.1%</span>
+                      <span className="text-gray-500 text-sm">{t('standardVat')}</span>
                     </div>
                   </div>
 
                   <div className="space-y-3">
-                    <Label className="text-gray-300">MWST Deadline Reminders</Label>
+                    <Label className="text-gray-300">{t('mwstReminders')}</Label>
                     <p className="text-xs text-gray-500">
                       Swiss MWST quarters are due 60 days after quarter end. Get notified before deadlines.
                     </p>
@@ -531,7 +532,7 @@ export default function SettingsPage() {
                     disabled={prefSaving}
                     className="bg-amber-500 hover:bg-amber-400 text-black font-semibold"
                   >
-                    {prefSaving ? 'Saving…' : 'Save Preferences'}
+                    {prefSaving ? tCommon('saving') : t('savePreferences')}
                   </Button>
                 </CardContent>
               </Card>
@@ -541,7 +542,7 @@ export default function SettingsPage() {
             <TabsContent value="export">
               <Card className="bg-gray-900 border-gray-800">
                 <CardHeader>
-                  <CardTitle className="text-white">Data Export</CardTitle>
+                  <CardTitle className="text-white">{t('exportTitle')}</CardTitle>
                   <CardDescription className="text-gray-400">
                     Download your income and expenses as Excel-compatible CSV
                   </CardDescription>
@@ -564,7 +565,7 @@ export default function SettingsPage() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="rounded-xl border border-gray-800 p-4 space-y-3">
                       <div>
-                        <p className="text-white font-medium text-sm">Income CSV</p>
+                        <p className="text-white font-medium text-sm">{tCommon('income') ?? 'Income'} CSV</p>
                         <p className="text-gray-500 text-xs mt-1">
                           Date, Client, Amount, VAT, Net, Category, Invoice No.
                         </p>
@@ -581,7 +582,7 @@ export default function SettingsPage() {
 
                     <div className="rounded-xl border border-gray-800 p-4 space-y-3">
                       <div>
-                        <p className="text-white font-medium text-sm">Expenses CSV</p>
+                        <p className="text-white font-medium text-sm">{tCommon('expenses') ?? 'Expenses'} CSV</p>
                         <p className="text-gray-500 text-xs mt-1">
                           Date, Vendor, Amount, VAT, Net, Category, Deductible
                         </p>

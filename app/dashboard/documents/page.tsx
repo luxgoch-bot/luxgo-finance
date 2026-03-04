@@ -23,6 +23,7 @@ import {
 } from '@/components/ui/dialog'
 import { SkeletonTable } from '@/components/ui/skeleton-table'
 import { formatDateCh } from '@/lib/helpers/format'
+import { useTranslations } from 'next-intl'
 import {
   Upload,
   Search,
@@ -101,6 +102,8 @@ interface UploadItem {
 
 export default function DocumentsPage() {
   const supabase = createClient()
+  const t = useTranslations('documents')
+  const tCommon = useTranslations('common')
 
   const [docs, setDocs] = useState<Document[]>([])
   const [loading, setLoading] = useState(true)
@@ -271,8 +274,8 @@ export default function DocumentsPage() {
           <div className="px-6 py-5 border-b border-gray-800">
             <div className="flex items-center justify-between flex-wrap gap-4">
               <div>
-                <h1 className="text-xl font-bold text-white">Documents</h1>
-                <p className="text-sm text-gray-400 mt-0.5">Receipts, invoices &amp; tax forms</p>
+                <h1 className="text-xl font-bold text-white">{t('title')}</h1>
+                <p className="text-sm text-gray-400 mt-0.5">{t('subtitle')}</p>
               </div>
               <Button
                 onClick={() => fileInputRef.current?.click()}
@@ -296,7 +299,7 @@ export default function DocumentsPage() {
               <div className="relative flex-1 min-w-48">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
                 <Input
-                  placeholder="Search files…"
+                  {...{'placeholder': t('searchFiles')}}
                   value={search}
                   onChange={e => setSearch(e.target.value)}
                   className="pl-9 bg-gray-900 border-gray-800 text-white placeholder:text-gray-600 focus:border-amber-500"
@@ -326,7 +329,7 @@ export default function DocumentsPage() {
                     className="border-gray-700 text-gray-400 hover:text-white">Cancel</Button>
                   <Button size="sm" onClick={runUploads} disabled={uploading}
                     className="bg-amber-500 hover:bg-amber-400 text-black font-semibold">
-                    {uploading ? 'Uploading…' : 'Upload All'}
+                    {uploading ? 'Uploading…' : t('uploadAll')}
                   </Button>
                 </div>
               </div>
@@ -382,11 +385,11 @@ export default function DocumentsPage() {
                   <FolderOpen className="h-8 w-8 text-gray-600" />
                 </div>
                 <p className="text-gray-400 font-medium">
-                  {search || typeFilter !== 'all' ? 'No documents match your filters' : 'No documents yet'}
+                  {search || typeFilter !== 'all' ? t('noMatch') : t('noDocuments').split('—')[0].trim()}
                 </p>
                 <p className="text-gray-600 text-sm mt-1">
                   {search || typeFilter !== 'all'
-                    ? 'Try adjusting your search or filter'
+                    ? t('adjustFilters')
                     : 'Drag files here or click "Upload Files" to add receipts, invoices, and tax forms'}
                 </p>
                 {!search && typeFilter === 'all' && (
@@ -495,7 +498,7 @@ export default function DocumentsPage() {
                 ) : (
                   <div className="flex flex-col items-center justify-center h-64 text-center">
                     <File className="h-12 w-12 text-gray-600 mb-3" />
-                    <p className="text-gray-400 text-sm">Preview not available</p>
+                    <p className="text-gray-400 text-sm">{t('previewUnavailable')}</p>
                     <a href={preview.publicUrl} download={preview.file_name}
                       className="mt-3 text-amber-400 text-sm hover:underline flex items-center gap-1">
                       <Download className="h-4 w-4" /> Download file
@@ -536,7 +539,7 @@ export default function DocumentsPage() {
       <Dialog open={!!deleteTarget} onOpenChange={() => setDeleteTarget(null)}>
         <DialogContent className="bg-gray-900 border-gray-800 text-white">
           <DialogHeader>
-            <DialogTitle>Delete document?</DialogTitle>
+            <DialogTitle>{t('deleteConfirmTitle')}</DialogTitle>
             <DialogDescription className="text-gray-400">
               <strong className="text-white">{deleteTarget?.file_name}</strong> will be permanently deleted from storage. This cannot be undone.
             </DialogDescription>

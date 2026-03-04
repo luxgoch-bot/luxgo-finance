@@ -2,8 +2,10 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 import { cn } from '@/lib/utils'
 import { logout } from '@/app/actions/auth'
+import { useLocale } from '@/lib/locale-context'
 import {
   LayoutDashboard,
   TrendingUp,
@@ -16,18 +18,20 @@ import {
   Settings,
 } from 'lucide-react'
 
-const navItems = [
-  { href: '/dashboard',              label: 'Dashboard',   icon: LayoutDashboard },
-  { href: '/dashboard/income',       label: 'Income',      icon: TrendingUp },
-  { href: '/dashboard/expenses',     label: 'Expenses',    icon: TrendingDown },
-  { href: '/dashboard/mwst',        label: 'MWST',        icon: Receipt },
-  { href: '/dashboard/tax-year',     label: 'Tax Year',    icon: CalendarDays },
-  { href: '/dashboard/documents',    label: 'Documents',   icon: FolderOpen },
-  { href: '/dashboard/settings',     label: 'Settings',    icon: Settings },
-]
-
 export function Sidebar() {
   const pathname = usePathname()
+  const t = useTranslations('nav')
+  const { locale, setLocale } = useLocale()
+
+  const navItems = [
+    { href: '/dashboard',              label: t('dashboard'),  icon: LayoutDashboard },
+    { href: '/dashboard/income',       label: t('income'),     icon: TrendingUp },
+    { href: '/dashboard/expenses',     label: t('expenses'),   icon: TrendingDown },
+    { href: '/dashboard/mwst',         label: t('mwst'),       icon: Receipt },
+    { href: '/dashboard/tax-year',     label: t('taxYear'),    icon: CalendarDays },
+    { href: '/dashboard/documents',    label: t('documents'),  icon: FolderOpen },
+    { href: '/dashboard/settings',     label: t('settings'),   icon: Settings },
+  ]
 
   return (
     <aside className="fixed inset-y-0 left-0 z-50 flex w-64 flex-col bg-gray-950 border-r border-gray-800">
@@ -66,30 +70,62 @@ export function Sidebar() {
           })}
         </ul>
 
-        {/* Invoice quick link */}
+        {/* Quick Actions */}
         <div className="mt-6 pt-6 border-t border-gray-800">
           <p className="px-3 mb-2 text-xs font-semibold uppercase tracking-wider text-gray-600">
-            Quick Actions
+            {t('quickActions')}
           </p>
           <Link
             href="/dashboard/income?action=new"
             className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-gray-400 hover:bg-gray-800 hover:text-white transition-colors"
           >
             <FileText className="h-4 w-4 text-gray-500" />
-            New Invoice
+            {t('newInvoice')}
           </Link>
         </div>
       </nav>
 
-      {/* Footer: logout */}
-      <div className="px-3 py-4 border-t border-gray-800">
+      {/* Language switcher + Sign out */}
+      <div className="px-3 py-4 border-t border-gray-800 space-y-1">
+        {/* Language toggle */}
+        <div className="flex items-center justify-between px-3 py-2 rounded-lg">
+          <span className="text-xs text-gray-500 uppercase tracking-wider font-semibold">Lang</span>
+          <div className="flex items-center gap-1 bg-gray-800 rounded-lg p-0.5">
+            <button
+              onClick={() => setLocale('en')}
+              className={cn(
+                'px-2.5 py-1 rounded-md text-xs font-semibold transition-colors',
+                locale === 'en'
+                  ? 'bg-amber-500 text-black'
+                  : 'text-gray-400 hover:text-white'
+              )}
+              title="English"
+            >
+              EN
+            </button>
+            <button
+              onClick={() => setLocale('de')}
+              className={cn(
+                'px-2.5 py-1 rounded-md text-xs font-semibold transition-colors',
+                locale === 'de'
+                  ? 'bg-amber-500 text-black'
+                  : 'text-gray-400 hover:text-white'
+              )}
+              title="Deutsch"
+            >
+              DE
+            </button>
+          </div>
+        </div>
+
+        {/* Sign out */}
         <form action={logout}>
           <button
             type="submit"
             className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-gray-400 hover:bg-gray-800 hover:text-white transition-colors"
           >
             <LogOut className="h-4 w-4 text-gray-500" />
-            Sign out
+            {t('signOut')}
           </button>
         </form>
       </div>
