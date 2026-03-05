@@ -170,3 +170,4 @@ vercel env add SUPABASE_SERVICE_ROLE_KEY production
 ## License
 
 Private — LuxGo GmbH internal tool.
+<!-- deploy: 2026-03-05T13:11:50Z -->
