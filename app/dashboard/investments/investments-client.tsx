@@ -32,16 +32,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { 
-  LineChart, 
-  LineChartIcon,
-  TrendingUp,
-  Plus,
-  Edit3,
-  Download,
-  ArrowUpRight,
-  ArrowDownRight
-} from 'lucide-react'
+import { TrendingUp, Plus, Edit3, Download } from 'lucide-react'
 import type { Profile, InvestmentAccount, InvestmentTransaction, InvestmentHolding, TaxYear } from '@/types'
 
 interface InvestmentsClientProps {
