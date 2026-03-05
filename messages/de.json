@@ -10,7 +10,8 @@
     "newInvoice": "Neue Rechnung",
     "quickActions": "Schnellaktionen",
     "signOut": "Abmelden",
-    "loans": "Kredite"
+    "loans": "Kredite",
+    "investments": "Investitionen"
   },
   "common": {
     "save": "Speichern",
@@ -306,6 +307,59 @@
       "mortgage": "Hypothek",
       "vehicle": "Fahrzeug",
       "other": "Sonstiges"
+    }
+  },
+  "investments": {
+    "title": "Investitionen",
+    "subtitle": "Aktien, Krypto & ETF Portfolio",
+    "addAccount": "Konto hinzufügen",
+    "addTransaction": "Transaktion hinzufügen",
+    "noAccounts": "Noch keine Anlagekonten — erstes Konto hinzufügen",
+    "noHoldings": "Noch keine Positionen erfasst",
+    "noTransactions": "Noch keine Transaktionen",
+    "totalPortfolio": "Gesamtportfoliowert",
+    "unrealisedGain": "Nicht realisierter Gewinn/Verlust",
+    "dividendsYtd": "Dividenden YTD",
+    "accountCount": "Konten",
+    "broker": "Broker",
+    "accountType": "Kontotyp",
+    "currency": "Währung",
+    "asset": "Anlage",
+    "ticker": "Ticker",
+    "quantity": "Menge",
+    "avgBuyPrice": "Durchschn. Kaufpreis",
+    "currentValue": "Aktueller Wert",
+    "gainLoss": "Gewinn / Verlust",
+    "totalInvested": "Gesamt investiert",
+    "realisedPnl": "Realisierter G/V",
+    "dividendsReceived": "Erhaltene Dividenden",
+    "taxFreeNote": "Kapitalgewinne auf beweglichem Vermögen sind für Privatanleger in der Schweiz STEUERFREI.",
+    "wealthTaxNote": "Alle Positionen müssen jährlich für die Vermögenssteuer deklariert werden.",
+    "taxableIncomeNote": "Dividenden und Zinserträge sind STEUERPFLICHTIG und müssen zur Einkommensdeklaration hinzugefügt werden.",
+    "professionalTraderDisclaimer": "Hinweis: Professionelle/hochfrequente Trader können einkommenssteuerpflichtig sein — Steuerberater konsultieren.",
+    "taxableIncomeYtd": "Steuerpflichtiges Einkommen YTD",
+    "portfolioForWealthTax": "Portfoliowert (Vermögenssteuer)",
+    "exportCsv": "Jahresend-CSV exportieren",
+    "types": {
+      "stocks": "Aktien",
+      "crypto": "Krypto",
+      "etf": "ETF",
+      "bonds": "Anleihen",
+      "mixed": "Gemischt"
+    },
+    "txTypes": {
+      "buy": "Kauf",
+      "sell": "Verkauf",
+      "dividend": "Dividende",
+      "interest": "Zinsen",
+      "fee": "Gebühr"
+    },
+    "assetTypes": {
+      "stock": "Aktie",
+      "etf": "ETF",
+      "crypto": "Krypto",
+      "bond": "Anleihe",
+      "other": "Andere"
     }
   }
 }

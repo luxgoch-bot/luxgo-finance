@@ -150,3 +150,59 @@ export interface LoanRepayment {
 
 export type CreateLoanInput = Omit<Loan, 'id' | 'created_at'>
 export type CreateLoanRepaymentInput = Omit<LoanRepayment, 'id' | 'created_at'>
+
+// ==========================================
+// Investments (Stocks & Crypto)
+// ==========================================
+
+export type InvestmentAccountType = 'stocks' | 'crypto' | 'etf' | 'bonds' | 'mixed'
+export type InvestmentTransactionType = 'buy' | 'sell' | 'dividend' | 'interest' | 'fee'
+export type InvestmentAssetType = 'stock' | 'etf' | 'crypto' | 'bond' | 'other'
+
+export interface InvestmentAccount {
+  id: string
+  profile_id: string
+  name: string
+  broker?: string
+  account_type: InvestmentAccountType
+  currency: string
+  notes?: string
+  created_at: string
+}
+
+export interface InvestmentTransaction {
+  id: string
+  account_id: string
+  profile_id: string
+  tax_year_id?: string | null
+  date: string
+  type: InvestmentTransactionType
+  asset_name: string
+  asset_ticker?: string
+  asset_type?: InvestmentAssetType
+  quantity?: number
+  price_per_unit?: number
+  total_amount_chf: number
+  fees_chf: number
+  exchange_rate: number
+  notes?: string
+  receipt_url?: string
+  created_at: string
+}
+
+export interface InvestmentHolding {
+  id: string
+  account_id: string
+  profile_id: string
+  asset_name: string
+  asset_ticker?: string
+  asset_type?: InvestmentAssetType
+  quantity?: number
+  average_buy_price?: number
+  current_value_chf?: number
+  last_updated: string
+}
+
+export type CreateInvestmentAccountInput = Omit<InvestmentAccount, 'id' | 'created_at'>
+export type CreateInvestmentTransactionInput = Omit<InvestmentTransaction, 'id' | 'created_at'>
+export type CreateInvestmentHoldingInput = Omit<InvestmentHolding, 'id' | 'last_updated'>

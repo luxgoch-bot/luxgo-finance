@@ -10,7 +10,8 @@
     "newInvoice": "New Invoice",
     "quickActions": "Quick Actions",
     "signOut": "Sign out",
-    "loans": "Loans"
+    "loans": "Loans",
+    "investments": "Investments"
   },
   "common": {
     "save": "Save",
@@ -305,6 +306,59 @@
       "business": "Business",
       "mortgage": "Mortgage",
       "vehicle": "Vehicle",
+      "other": "Other"
+    }
+  },
+  "investments": {
+    "title": "Investments",
+    "subtitle": "Stocks, crypto & ETF portfolio",
+    "addAccount": "Add Account",
+    "addTransaction": "Add Transaction",
+    "noAccounts": "No investment accounts yet — add your first account",
+    "noHoldings": "No holdings recorded yet",
+    "noTransactions": "No transactions yet",
+    "totalPortfolio": "Total Portfolio Value",
+    "unrealisedGain": "Unrealised Gain/Loss",
+    "dividendsYtd": "Dividends YTD",
+    "accountCount": "Accounts",
+    "broker": "Broker",
+    "accountType": "Account Type",
+    "currency": "Currency",
+    "asset": "Asset",
+    "ticker": "Ticker",
+    "quantity": "Quantity",
+    "avgBuyPrice": "Avg Buy Price",
+    "currentValue": "Current Value",
+    "gainLoss": "Gain / Loss",
+    "totalInvested": "Total Invested",
+    "realisedPnl": "Realised P&L",
+    "dividendsReceived": "Dividends Received",
+    "taxFreeNote": "Capital gains on movable assets are TAX-FREE for private investors in Switzerland.",
+    "wealthTaxNote": "All holdings must be declared annually for Vermögenssteuer (wealth tax).",
+    "taxableIncomeNote": "Dividends and interest income are TAXABLE and must be added to your income declaration.",
+    "professionalTraderDisclaimer": "Note: Professional/high-frequency traders may be subject to income tax on gains — consult a tax advisor.",
+    "taxableIncomeYtd": "Taxable Income YTD",
+    "portfolioForWealthTax": "Portfolio Value (Wealth Tax)",
+    "exportCsv": "Export Year-End CSV",
+    "types": {
+      "stocks": "Stocks",
+      "crypto": "Crypto",
+      "etf": "ETF",
+      "bonds": "Bonds",
+      "mixed": "Mixed"
+    },
+    "txTypes": {
+      "buy": "Buy",
+      "sell": "Sell",
+      "dividend": "Dividend",
+      "interest": "Interest",
+      "fee": "Fee"
+    },
+    "assetTypes": {
+      "stock": "Stock",
+      "etf": "ETF",
+      "crypto": "Crypto",
+      "bond": "Bond",
       "other": "Other"
     }
   }

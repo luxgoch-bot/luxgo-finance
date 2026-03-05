@@ -17,6 +17,7 @@ import {
   Receipt,
   Settings,
   Landmark,
+  LineChart,
 } from 'lucide-react'
 
 export function Sidebar() {
@@ -29,6 +30,7 @@ export function Sidebar() {
     { href: '/dashboard/income',       label: t('income'),     icon: TrendingUp },
     { href: '/dashboard/expenses',     label: t('expenses'),   icon: TrendingDown },
     { href: '/dashboard/loans',        label: t('loans'),      icon: Landmark },
+    { href: '/dashboard/investments',  label: t('investments'), icon: LineChart },
     { href: '/dashboard/mwst',         label: t('mwst'),       icon: Receipt },
     { href: '/dashboard/tax-year',     label: t('taxYear'),    icon: CalendarDays },
     { href: '/dashboard/documents',    label: t('documents'),  icon: FolderOpen },
