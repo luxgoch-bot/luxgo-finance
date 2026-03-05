@@ -1,7 +1,7 @@
 import { createClient } from '@/lib/supabase-server'
 import { redirect } from 'next/navigation'
 import { DashboardClient } from './dashboard-client'
-import type { Profile, Income, Expense, Loan, LoanRepayment } from '@/types'
+import type { Profile, Income, Expense, Loan, LoanRepayment, InvestmentHolding, InvestmentTransaction } from '@/types'
 
 export default async function DashboardPage() {
   const supabase = await createClient()
@@ -20,13 +20,24 @@ export default async function DashboardPage() {
   const currentYear = new Date().getFullYear()
   const profileIds = profiles.map((p: Profile) => p.id)
 
-  const [{ data: incomeData }, { data: expenseData }, { data: loansData }, { data: repaymentsData }] = await Promise.all([
+  const [
+    { data: incomeData },
+    { data: expenseData },
+    { data: loansData },
+    { data: repaymentsData },
+    { data: holdingsData },
+    { data: investmentTxData },
+  ] = await Promise.all([
     supabase.from('income').select('*').in('profile_id', profileIds)
       .gte('date', `${currentYear}-01-01`).lte('date', `${currentYear}-12-31`),
     supabase.from('expenses').select('*').in('profile_id', profileIds)
       .gte('date', `${currentYear}-01-01`).lte('date', `${currentYear}-12-31`),
     supabase.from('loans').select('*').in('profile_id', profileIds),
     supabase.from('loan_repayments').select('*').in('profile_id', profileIds).order('date'),
+    supabase.from('investment_holdings').select('*').in('profile_id', profileIds),
+    supabase.from('investment_transactions').select('*').in('profile_id', profileIds)
+      .in('type', ['dividend', 'interest'])
+      .gte('date', `${currentYear}-01-01`).lte('date', `${currentYear}-12-31`),
   ])
 
   return (
@@ -36,6 +47,8 @@ export default async function DashboardPage() {
       initialExpenses={(expenseData as Expense[]) ?? []}
       initialLoans={(loansData as Loan[]) ?? []}
       initialRepayments={(repaymentsData as LoanRepayment[]) ?? []}
+      initialHoldings={(holdingsData as InvestmentHolding[]) ?? []}
+      initialDividendTx={(investmentTxData as InvestmentTransaction[]) ?? []}
       currentYear={currentYear}
     />
   )

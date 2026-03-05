@@ -30,7 +30,7 @@ import {
   Loader2,
   User,
 } from 'lucide-react'
-import type { Income, Expense, TaxYear, Profile } from '@/types'
+import type { Income, Expense, TaxYear, Profile, InvestmentHolding, InvestmentTransaction } from '@/types'
 
 interface PersonalTaxTabProps {
   profile:                 Profile
@@ -39,6 +39,8 @@ interface PersonalTaxTabProps {
   expenses:                Expense[]
   taxYear?:                TaxYear
   businessSalaryExpenses:  Expense[]
+  holdings?:               InvestmentHolding[]
+  investmentTx?:           InvestmentTransaction[]
 }
 
 const CHECKLIST_STORAGE_KEY = (profileId: string, year: number) =>
@@ -60,6 +62,8 @@ export function PersonalTaxTab({
   expenses,
   taxYear,
   businessSalaryExpenses,
+  holdings = [],
+  investmentTx = [],
 }: PersonalTaxTabProps) {
   // ── Income state ────────────────────────────────────────────────────────
   const derivedSalary = useMemo(() =>
@@ -161,6 +165,16 @@ export function PersonalTaxTab({
     setNotesMsg('Saved.')
     setTimeout(() => setNotesMsg(null), 2000)
   }
+
+  // ── Investment KPIs ──────────────────────────────────────────────────────
+  const portfolioValueForWealthTax = useMemo(
+    () => holdings.reduce((s, h) => s + (h.current_value_chf ?? 0), 0),
+    [holdings]
+  )
+  const dividendIncomeYtd = useMemo(
+    () => investmentTx.reduce((s, t) => s + t.total_amount_chf, 0),
+    [investmentTx]
+  )
 
   // ── Tax calculation ──────────────────────────────────────────────────────
   const result = useMemo(() =>
@@ -564,6 +578,87 @@ export function PersonalTaxTab({
           </CardContent>
         </Card>
       )}
+
+      {/* Investments — Swiss Tax Declaration ───────────────────────── */}
+      <Card className="border-amber-200 shadow-sm">
+        <CardHeader className="pb-3 pt-4 px-5">
+          <div className="flex items-center justify-between">
+            <CardTitle className="text-sm font-semibold text-gray-800">
+              🇨🇭 Investments — Swiss Tax Declaration
+            </CardTitle>
+            <Badge className="bg-green-100 text-green-700 border-green-200 text-xs">Capital Gains: TAX FREE</Badge>
+          </div>
+        </CardHeader>
+        <CardContent className="px-5 pb-5 space-y-4">
+          {/* Disclaimer */}
+          <div className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-xs text-amber-800 space-y-1">
+            <p><strong>Capital gains</strong> on movable assets (stocks, crypto, ETFs) are <strong className="text-green-700">TAX-FREE</strong> for private investors in Switzerland.</p>
+            <p><strong>Dividends and interest</strong> are <strong className="text-red-700">taxable income</strong> — they must be declared under income.</p>
+            <p><strong>All holdings</strong> must be declared annually for <strong>Vermögenssteuer</strong> (wealth tax) at year-end market value.</p>
+            <p className="text-gray-500 italic">Note: Professional/high-frequency traders may be subject to income tax on gains — consult a tax advisor.</p>
+          </div>
+
+          {/* Investment KPI Row */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="rounded-lg border border-gray-200 bg-gray-50 p-4">
+              <p className="text-xs text-gray-500 mb-1">Portfolio Value — Declare as Vermögen</p>
+              <p className="text-2xl font-bold text-gray-900">{formatChf(portfolioValueForWealthTax)}</p>
+              <p className="text-xs text-gray-400 mt-1">Year-end market value of all holdings ({year})</p>
+              {holdings.length === 0 && (
+                <p className="text-xs text-gray-400 mt-2 italic">No holdings recorded yet — add via Investments module</p>
+              )}
+            </div>
+            <div className="rounded-lg border border-orange-200 bg-orange-50 p-4">
+              <p className="text-xs text-orange-600 mb-1">Dividend &amp; Interest Income — TAXABLE ⚠️</p>
+              <p className="text-2xl font-bold text-orange-700">{formatChf(dividendIncomeYtd)}</p>
+              <p className="text-xs text-orange-500 mt-1">Must be added to income declaration ({year})</p>
+              {investmentTx.length === 0 && (
+                <p className="text-xs text-orange-400 mt-2 italic">No dividend/interest recorded yet</p>
+              )}
+            </div>
+          </div>
+
+          {/* Holdings breakdown for declaration */}
+          {holdings.length > 0 && (
+            <div>
+              <p className="text-xs font-semibold text-gray-600 mb-2 uppercase tracking-wide">Holdings to Declare (Vermögenssteuer)</p>
+              <div className="rounded border border-gray-200 overflow-hidden">
+                <table className="w-full text-xs">
+                  <thead>
+                    <tr className="bg-gray-100 border-b border-gray-200 text-gray-500 uppercase">
+                      <th className="px-3 py-2 text-left">Asset</th>
+                      <th className="px-3 py-2 text-left">Type</th>
+                      <th className="px-3 py-2 text-right">Qty</th>
+                      <th className="px-3 py-2 text-right">Value (CHF)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {holdings.map(h => (
+                      <tr key={h.id} className="border-b border-gray-100 hover:bg-gray-50">
+                        <td className="px-3 py-2 font-medium text-gray-800">
+                          {h.asset_name}
+                          {h.asset_ticker && <span className="text-gray-400 ml-1">({h.asset_ticker})</span>}
+                        </td>
+                        <td className="px-3 py-2 text-gray-500 capitalize">{h.asset_type ?? '—'}</td>
+                        <td className="px-3 py-2 text-right text-gray-600">
+                          {h.quantity != null ? Number(h.quantity).toFixed(4) : '—'}
+                        </td>
+                        <td className="px-3 py-2 text-right font-semibold text-gray-900">
+                          {h.current_value_chf != null ? formatChf(h.current_value_chf) : '—'}
+                        </td>
+                      </tr>
+                    ))}
+                    <tr className="bg-gray-50 font-semibold">
+                      <td className="px-3 py-2 text-gray-700" colSpan={3}>Total Vermögen (Investments)</td>
+                      <td className="px-3 py-2 text-right text-gray-900">{formatChf(portfolioValueForWealthTax)}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+        </CardContent>
+      </Card>
 
       {/* Personal Submission Checklist ──────────────────────────────── */}
       <Card className="border-gray-200 shadow-sm">

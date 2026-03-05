@@ -1,7 +1,7 @@
 import { createClient } from '@/lib/supabase-server'
 import { redirect } from 'next/navigation'
 import { TaxYearClient } from './tax-year-client'
-import type { Profile, TaxYear, Income, Expense, MwstReport } from '@/types'
+import type { Profile, TaxYear, Income, Expense, MwstReport, InvestmentHolding, InvestmentTransaction } from '@/types'
 
 export default async function TaxYearPage() {
   const supabase = await createClient()
@@ -24,6 +24,8 @@ export default async function TaxYearPage() {
     { data: expenseData },
     { data: taxYears },
     { data: mwstReports },
+    { data: holdingsData },
+    { data: investmentTxData },
   ] = await Promise.all([
     supabase.from('income').select('*').in('profile_id', profileIds),
     supabase.from('expenses').select('*').in('profile_id', profileIds),
@@ -32,6 +34,8 @@ export default async function TaxYearPage() {
       .select('*, tax_years(year)')
       .in('profile_id', profileIds)
       .eq('status', 'submitted'),
+    supabase.from('investment_holdings').select('*').in('profile_id', profileIds),
+    supabase.from('investment_transactions').select('*').in('profile_id', profileIds).in('type', ['dividend', 'interest']),
   ])
 
   return (
@@ -41,6 +45,8 @@ export default async function TaxYearPage() {
       allExpenses={(expenseData as Expense[]) ?? []}
       taxYears={(taxYears as TaxYear[]) ?? []}
       submittedMwst={(mwstReports as (MwstReport & { tax_years?: { year: number } })[]) ?? []}
+      allHoldings={(holdingsData as InvestmentHolding[]) ?? []}
+      allInvestmentTx={(investmentTxData as InvestmentTransaction[]) ?? []}
       currentYear={currentYear}
     />
   )

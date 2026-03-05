@@ -12,15 +12,17 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { BusinessTaxTab } from './business-tab'
 import { PersonalTaxTab } from './personal-tab'
-import type { Profile, TaxYear, Income, Expense, MwstReport } from '@/types'
+import type { Profile, TaxYear, Income, Expense, MwstReport, InvestmentHolding, InvestmentTransaction } from '@/types'
 
 interface TaxYearClientProps {
-  profiles:      Profile[]
-  allIncome:     Income[]
-  allExpenses:   Expense[]
-  taxYears:      TaxYear[]
-  submittedMwst: (MwstReport & { tax_years?: { year: number } })[]
-  currentYear:   number
+  profiles:         Profile[]
+  allIncome:        Income[]
+  allExpenses:      Expense[]
+  taxYears:         TaxYear[]
+  submittedMwst:    (MwstReport & { tax_years?: { year: number } })[]
+  allHoldings:      InvestmentHolding[]
+  allInvestmentTx:  InvestmentTransaction[]
+  currentYear:      number
 }
 
 export function TaxYearClient({
@@ -29,6 +31,8 @@ export function TaxYearClient({
   allExpenses,
   taxYears,
   submittedMwst,
+  allHoldings,
+  allInvestmentTx,
   currentYear,
 }: TaxYearClientProps) {
   const [selectedYear, setSelectedYear] = useState<number>(currentYear)
@@ -113,9 +117,13 @@ export function TaxYearClient({
                 income={yearIncome.filter(i => i.profile_id === personalProfile.id)}
                 expenses={yearExpenses.filter(e => e.profile_id === personalProfile.id)}
                 taxYear={taxYears.find(ty => ty.profile_id === personalProfile.id && ty.year === selectedYear)}
-                // Pass salary from business expenses if any
                 businessSalaryExpenses={yearExpenses.filter(e =>
                   e.profile_id === businessProfile?.id && e.category === 'salary'
+                )}
+                holdings={allHoldings.filter(h => h.profile_id === personalProfile.id)}
+                investmentTx={allInvestmentTx.filter(t =>
+                  t.profile_id === personalProfile.id &&
+                  new Date(t.date).getFullYear() === selectedYear
                 )}
               />
             </TabsContent>

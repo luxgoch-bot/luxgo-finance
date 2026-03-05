@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from 'react'
 import Link from 'next/link'
-import { TrendingUp, TrendingDown, DollarSign, AlertCircle, Plus, Landmark } from 'lucide-react'
+import { TrendingUp, TrendingDown, DollarSign, AlertCircle, Plus, Landmark, LineChart } from 'lucide-react'
 import { KpiCard } from '@/components/kpi-card'
 import { ProfileSwitcher } from '@/components/profile-switcher'
 import { MwstWidget } from '@/components/mwst-widget'
@@ -11,7 +11,7 @@ import { ExpenseDonut } from '@/components/charts/expense-donut'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { calculateVatPayable, extractVAT } from '@/lib/helpers/vat'
-import type { Profile, Income, Expense, Loan, LoanRepayment } from '@/types'
+import type { Profile, Income, Expense, Loan, LoanRepayment, InvestmentHolding, InvestmentTransaction } from '@/types'
 
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
@@ -21,6 +21,8 @@ interface DashboardClientProps {
   initialExpenses: Expense[]
   initialLoans: Loan[]
   initialRepayments: LoanRepayment[]
+  initialHoldings: InvestmentHolding[]
+  initialDividendTx: InvestmentTransaction[]
   currentYear: number
 }
 
@@ -30,6 +32,8 @@ export function DashboardClient({
   initialExpenses,
   initialLoans,
   initialRepayments,
+  initialHoldings,
+  initialDividendTx,
   currentYear,
 }: DashboardClientProps) {
   const [currentProfile, setCurrentProfile] = useState<Profile>(profiles[0])
@@ -96,6 +100,20 @@ export function DashboardClient({
       })
       .reduce((sum, r) => sum + r.interest_amount, 0)
   }, [initialRepayments, initialLoans, currentProfile.id, currentYear])
+
+  // ── Investment KPIs ────────────────────────────────────────────
+  const totalPortfolioValue = useMemo(
+    () => initialHoldings
+      .filter(h => h.profile_id === currentProfile.id)
+      .reduce((s, h) => s + (h.current_value_chf ?? 0), 0),
+    [initialHoldings, currentProfile.id]
+  )
+  const dividendYtd = useMemo(
+    () => initialDividendTx
+      .filter(t => t.profile_id === currentProfile.id)
+      .reduce((s, t) => s + t.total_amount_chf, 0),
+    [initialDividendTx, currentProfile.id]
+  )
 
   // ── Monthly chart data ─────────────────────────────────────────
   const monthlyData = useMemo(() => {
@@ -209,6 +227,13 @@ export function DashboardClient({
             icon={AlertCircle}
             variant="warning"
             description={`Q${currentQuarter} estimate`}
+          />
+          <KpiCard
+            title="Portfolio Value"
+            value={totalPortfolioValue}
+            icon={LineChart}
+            variant="positive"
+            description={dividendYtd > 0 ? `Div. income YTD: CHF ${dividendYtd.toFixed(2)} (taxable)` : 'Investments — capital gains tax-free 🇨🇭'}
           />
         </div>
 
