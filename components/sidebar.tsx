@@ -29,6 +29,7 @@ export function Sidebar() {
     { href: '/dashboard',              label: t('dashboard'),  icon: LayoutDashboard },
     { href: '/dashboard/income',       label: t('income'),     icon: TrendingUp },
     { href: '/dashboard/expenses',     label: t('expenses'),   icon: TrendingDown },
+    { href: '/dashboard/payments',     label: t('payments'),   icon: Receipt },
     { href: '/dashboard/loans',        label: t('loans'),      icon: Landmark },
     { href: '/dashboard/investments',  label: t('investments'), icon: LineChart },
     { href: '/dashboard/mwst',         label: t('mwst'),       icon: Receipt },

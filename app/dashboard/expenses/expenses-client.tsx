@@ -29,12 +29,13 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from '@/components/ui/tabs'
+// Tabs components imported but not currently used
+// import {
+//   Tabs,
+//   TabsContent,
+//   TabsList,
+//   TabsTrigger,
+// } from '@/components/ui/tabs'
 import { Plus, Search, Pencil, Trash2, ExternalLink, ArrowUpDown, ChevronUp, ChevronDown, Upload } from 'lucide-react'
 import { formatChf, formatDateCh } from '@/lib/helpers/format'
 import { extractVAT, getNetAmount } from '@/lib/helpers/vat'

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useMemo, useCallback } from 'react'
+import { useState, useMemo } from 'react'
 import { deleteIncome } from '@/app/actions/income'
 import { IncomeForm } from '@/components/forms/income-form'
 import { SummaryBar } from '@/components/summary-bar'
@@ -72,7 +72,8 @@ export function IncomeClient({ profiles, incomeRecords: initial, taxYears }: Inc
   const [sortKey, setSortKey]         = useState<SortKey>('date')
   const [sortDir, setSortDir]         = useState<SortDir>('desc')
 
-  const currentYear = new Date().getFullYear()
+  // Current year variable commented out as it's not currently used
+  // const currentYear = new Date().getFullYear()
   const defaultProfileId = profiles[0]?.id ?? ''
 
   // Sort handler
@@ -98,8 +99,8 @@ export function IncomeClient({ profiles, incomeRecords: initial, taxYears }: Inc
     }
 
     return [...r].sort((a, b) => {
-      let av: string | number = a[sortKey] ?? ''
-      let bv: string | number = b[sortKey] ?? ''
+      const av: string | number = a[sortKey] ?? ''
+      const bv: string | number = b[sortKey] ?? ''
       if (typeof av === 'string' && typeof bv === 'string') {
         return sortDir === 'asc' ? av.localeCompare(bv) : bv.localeCompare(av)
       }

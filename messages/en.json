@@ -3,6 +3,7 @@
     "dashboard": "Dashboard",
     "income": "Income",
     "expenses": "Expenses",
+    "payments": "Payments",
     "mwst": "MWST",
     "taxYear": "Tax Year",
     "documents": "Documents",

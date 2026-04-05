@@ -206,3 +206,26 @@ export interface InvestmentHolding {
 export type CreateInvestmentAccountInput = Omit<InvestmentAccount, 'id' | 'created_at'>
 export type CreateInvestmentTransactionInput = Omit<InvestmentTransaction, 'id' | 'created_at'>
 export type CreateInvestmentHoldingInput = Omit<InvestmentHolding, 'id' | 'last_updated'>
+
+// ==========================================
+// Payments
+// ==========================================
+
+export interface Payment {
+  id: string
+  profile_id: string
+  event_type: string
+  amount: number
+  currency: string
+  status: 'succeeded' | 'failed' | 'pending' | 'canceled'
+  customer_email?: string
+  booking_id?: string
+  stripe_payment_intent_id?: string
+  stripe_customer_id?: string
+  stripe_event_id?: string
+  metadata?: Record<string, any>
+  created_at: string
+  updated_at: string
+}
+
+export type CreatePaymentInput = Omit<Payment, 'id' | 'created_at' | 'updated_at'>

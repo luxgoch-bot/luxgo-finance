@@ -5,7 +5,6 @@ import { createClient } from '@/lib/supabase'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Badge } from '@/components/ui/badge'
 import {
   Select,
   SelectContent,
@@ -103,7 +102,8 @@ interface UploadItem {
 export default function DocumentsPage() {
   const supabase = createClient()
   const t = useTranslations('documents')
-  const tCommon = useTranslations('common')
+  // Translation hook commented out as it's not currently used
+  // const tCommon = useTranslations('common')
 
   const [docs, setDocs] = useState<Document[]>([])
   const [loading, setLoading] = useState(true)
@@ -117,11 +117,7 @@ export default function DocumentsPage() {
   const [uploading, setUploading] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
-  useEffect(() => {
-    loadData()
-  }, [])
-
-  async function loadData() {
+  const loadData = useCallback(async () => {
     setLoading(true)
     try {
       const { data: { user } } = await supabase.auth.getUser()
@@ -161,7 +157,11 @@ export default function DocumentsPage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [supabase])
+
+  useEffect(() => {
+    loadData()
+  }, [loadData])
 
   const handleFiles = useCallback((files: FileList | File[]) => {
     const items: UploadItem[] = Array.from(files).map(file => ({
